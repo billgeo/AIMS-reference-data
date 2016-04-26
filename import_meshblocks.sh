@@ -42,7 +42,7 @@ if [ ! -f $con_file ]; then
     exit
 fi
 
-# Import meshblocks
+# Import meshblocks and concordance
 psql -h $host -U $user -d $db -f ./sql/create_meshblock.sql \
 && \
 ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
@@ -53,20 +53,19 @@ ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
            -append \
            && echo "Imported Meshblocks" \
 && \
-psql -h $host -U $user -d $db -f ./sql/setup_meshblock.sql \
+psql -h $host -U $user -d $db -c "COMMENT ON TABLE admin_bdys.meshblock IS 'Imported on $(date);'" \
 && \
-psql -h $host -U $user -d $db -c "COMMENT ON TABLE admin_bdys.meshblock IS 'Imported on $(date);'" 
-
-# Import meshblock concordance
 psql -h $host -U $user -d $db -f ./sql/create_concordance.sql \
 && \
 ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
            "$con_file" \
            -nln admin_bdys.meshblock_concordance \
            -append \
-           -sql 'SELECT  objectid, meshblock, ta, region, "GED 2007" as ged_2007, "MED 2007" as med_2007, ged, med from Stats_Meshblock_concordance' \
+           -sql 'SELECT  meshblock, ta, region, "GED 2007" as ged_2007, "MED 2007" as med_2007, ged, med from Stats_Meshblock_concordance' \
            && echo 'Imported concordance' \
 && \
-psql -h $host -U $user -d $db -c "COMMENT ON TABLE admin_bdys.meshblock_concordance IS 'Imported on $(date);'" 
+psql -h $host -U $user -d $db -c "COMMENT ON TABLE admin_bdys.meshblock_concordance IS 'Imported on $(date);'" \
+&& \
+psql -h $host -U $user -d $db -f ./sql/setup_meshblock.sql \
 
 rm -R $tmp_dir

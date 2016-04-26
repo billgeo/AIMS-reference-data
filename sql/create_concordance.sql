@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS admin_bdys.meshblock_concordance CASCADE;
 
 CREATE TABLE admin_bdys.meshblock_concordance
 (
-  objectid integer,
   meshblock character varying,
   ta character varying,
   region character varying,

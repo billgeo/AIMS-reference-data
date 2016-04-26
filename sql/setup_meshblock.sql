@@ -1,5 +1,5 @@
 alter table admin_bdys.meshblock add primary key (code);
-alter table admin_bdys.meshblock_concordance add primary key (objectid);
+alter table admin_bdys.meshblock_concordance add primary key (meshblock);
 
 update admin_bdys.meshblock set shape = ST_Shift_Longitude(shape);
 
