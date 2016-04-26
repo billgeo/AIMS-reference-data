@@ -1,4 +1,4 @@
-alter table admin_bdys.nz_locality add primary key (id); 
+alter table admin_bdys.nz_locality add primary key (id);
 
 update admin_bdys.nz_locality set shape = ST_Shift_Longitude(shape);
 

@@ -1,8 +1,8 @@
+#!/bin/bash
 dir="/media/gisdata/NZ Localities";
 
 if [ -z $4 ]; then
    echo "Usage: $0 <host> <db> <user> <pass>";
-   echo "Note: you may be asked to enter your password again";
    exit;
 fi;
 

@@ -1,5 +1,3 @@
---SELECT table_version.ver_disable_versioning('admin_bdys', 'suburb_alias');
-
 drop table if exists admin_bdys.suburb_alias cascade;
 
 CREATE TABLE admin_bdys.suburb_alias

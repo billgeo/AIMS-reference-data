@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ -z $3 ]; then
    echo "Usage: $0 <host> <db> <user>";
    echo "Note: you may be asked to enter your password again";

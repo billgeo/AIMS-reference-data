@@ -1,5 +1,3 @@
---SELECT table_version.ver_disable_versioning('admin_bdys', 'nz_locality');
-
 drop table if exists admin_bdys.nz_locality cascade;
 
 CREATE TABLE admin_bdys.nz_locality
