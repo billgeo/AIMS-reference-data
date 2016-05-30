@@ -11,6 +11,18 @@ db=$2
 user=$3
 pass=$4
 
+echo "Starting suburb_aliases"
+
+psql -h $host -U $user -d $db -f ./sql/create_suburb_alias.sql \
+\
+&& \
+\
+ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
+    "$dir/Suburb_Alias.dbf" \
+    -nln admin_bdys.suburb_alias \
+    -sql "SELECT cast(LocalityID as integer) as locality_id, aliasname AS alias_name, aliastype as alias_type from Suburb_Alias" \
+    -append \
+&& echo "Imported suburb_aliases";
 
 echo "Starting localities"
 
@@ -44,15 +56,3 @@ psql -h $host -U $user -d $db -f ./sql/setup_nz_locality.sql \
 && \
 echo "Imported nz_localities";
 
-echo "Starting suburb_aliases"
-
-psql -h $host -U $user -d $db -f ./sql/create_suburb_alias.sql \
-\
-&& \
-\
-ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
-    "$dir/Suburb_Alias.csv" \
-    -nln admin_bdys.suburb_alias \
-    -sql "SELECT cast(LocalityID as integer) as locality_id, aliasname AS alias_name, aliastype as alias_type from Suburb_Alias" \
-    -append \
-&& echo "Imported suburb_aliases";
