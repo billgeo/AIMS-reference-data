@@ -21,10 +21,13 @@ CREATE TABLE admin_bdys.nz_locality
 );
 
 ALTER TABLE admin_bdys.nz_locality
-  OWNER TO postgres;
+  OWNER TO bde_dba;
 
-GRANT ALL ON TABLE admin_bdys.nz_locality TO bde_dba;
-GRANT SELECT ON TABLE admin_bdys.nz_locality TO public;
+GRANT ALL ON TABLE admin_bdys.nz_localities TO bde_dba;
+GRANT SELECT ON TABLE admin_bdys.nz_localities TO roads_admin;
+GRANT SELECT ON TABLE admin_bdys.nz_localities TO roads_user;
+GRANT SELECT ON TABLE admin_bdys.nz_localities TO aims_admin;
+GRANT SELECT ON TABLE admin_bdys.nz_localities TO aims_user;
 
 CREATE INDEX nz_locality_shape_geom_idx
   ON admin_bdys.nz_locality
