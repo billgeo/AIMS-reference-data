@@ -22,7 +22,10 @@ ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
     -nln admin_bdys.suburb_alias \
     -sql "SELECT cast(LocalityID as integer) as locality_id, aliasname AS alias_name, aliastype as alias_type from Suburb_Alias" \
     -append \
-&& echo "Imported suburb_aliases";
+&& \
+psql -h $host -U $user -d $db -c "COMMENT ON TABLE admin_bdys.suburb_alias IS 'Imported on $(date);'" \
+&& \
+echo "Imported suburb_aliases";
 
 echo "Starting localities"
 
@@ -53,6 +56,10 @@ ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
     -append \
 && \
 psql -h $host -U $user -d $db -f ./sql/setup_nz_locality.sql \
+&& \
+psql -h $host -U $user -d $db -c "UPDATE admin_bdys.nz_locality SET shape=ST_Shift_Longitude(shape)" \
+&& \
+psql -h $host -U $user -d $db -c "COMMENT ON TABLE admin_bdys.nz_locality IS 'Imported on $(date);'" \
 && \
 echo "Imported nz_localities";
 
