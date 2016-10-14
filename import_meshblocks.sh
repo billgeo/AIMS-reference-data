@@ -53,8 +53,8 @@ ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
            -append \
            && echo "Imported Meshblocks" \
 && \
-psql -h $host -U $user -d $db -c "UPDATE admin_bdys.meshblock SET shape=ST_Shift_Longitude(shape)" \
-&& \
+#psql -h $host -U $user -d $db -c "UPDATE admin_bdys.meshblock SET shape=ST_Shift_Longitude(shape)" \
+#&& \
 psql -h $host -U $user -d $db -c "COMMENT ON TABLE admin_bdys.meshblock IS 'Imported on $(date);'" \
 && \
 psql -h $host -U $user -d $db -f ./sql/create_concordance.sql \

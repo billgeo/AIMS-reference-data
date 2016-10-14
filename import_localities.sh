@@ -57,8 +57,8 @@ ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
 && \
 psql -h $host -U $user -d $db -f ./sql/setup_nz_locality.sql \
 && \
-psql -h $host -U $user -d $db -c "UPDATE admin_bdys.nz_locality SET shape=ST_Shift_Longitude(shape)" \
-&& \
+#psql -h $host -U $user -d $db -c "UPDATE admin_bdys.nz_locality SET shape=ST_Shift_Longitude(shape)" \
+#&& \
 psql -h $host -U $user -d $db -c "COMMENT ON TABLE admin_bdys.nz_locality IS 'Imported on $(date);'" \
 && \
 echo "Imported nz_localities";
