@@ -3,7 +3,7 @@ dir="/media/gisdata/NZ Localities";
 
 if [ -z $4 ]; then
    echo "Usage: $0 <host> <db> <user> <pass>";
-   exit;
+   exit 1;
 fi;
 
 host=$1
@@ -11,12 +11,10 @@ db=$2
 user=$3
 pass=$4
 
-echo "Starting suburb_aliases"
-
-psql -h $host -U $user -d $db -f ./sql/create_suburb_alias.sql \
-\
+echo "Starting suburb_aliases" \
 && \
-\
+psql -h $host -U $user -d $db -f ./sql/create_suburb_alias.sql \
+&& \
 ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
     "$dir/Suburb_Alias.dbf" \
     -nln admin_bdys.suburb_alias \
@@ -25,10 +23,10 @@ ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
 && \
 psql -h $host -U $user -d $db -c "COMMENT ON TABLE admin_bdys.suburb_alias IS 'Imported on $(date);'" \
 && \
-echo "Imported suburb_aliases";
-
+echo "Imported suburb_aliases" \
+&& \
 echo "Starting localities"
-
+&& \
 psql -h $host -U $user -d $db -f ./sql/create_nz_locality.sql \
 && \
 ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
@@ -57,8 +55,6 @@ ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
 && \
 psql -h $host -U $user -d $db -f ./sql/setup_nz_locality.sql \
 && \
-#psql -h $host -U $user -d $db -c "UPDATE admin_bdys.nz_locality SET shape=ST_Shift_Longitude(shape)" \
-#&& \
 psql -h $host -U $user -d $db -c "COMMENT ON TABLE admin_bdys.nz_locality IS 'Imported on $(date);'" \
 && \
 echo "Imported nz_localities";

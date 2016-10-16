@@ -15,7 +15,7 @@ tmp_dir='/tmp/meshblock_tmp'
 if [ ! -f $src ]; then
     echo "ERROR: Can not find file: $src"
     echo "Have you mounted the meshblock file server to '/media/meshblock'? See geodeticwiki for more info."
-    exit
+    exit 1
 fi
 
 echo "Starting meshblocks and concordance"
@@ -24,7 +24,7 @@ mkdir $tmp_dir
 
 if [ ! -d $tmp_dir ]; then
     echo "ERROR: Could not create temp dir: $tmp_dir"
-    exit
+    exit 1
 fi
 
 unzip -d $tmp_dir $src;
@@ -34,12 +34,12 @@ con_file="$tmp_dir/Stats_Meshblock_concordance.csv"
 
 if [ ! -f $mb_file ]; then
     echo "ERROR: Meshblock shapefile not found: $mb_file"
-    exit
+    exit 1
 fi
 
 if [ ! -f $con_file ]; then
     echo "ERROR: Meshblock concordance csv file not found: $con_file"
-    exit
+    exit 1
 fi
 
 # Import meshblocks and concordance
@@ -53,8 +53,6 @@ ogr2ogr -f "PostgreSQL" PG:"host=$host user=$user dbname=$db password=$pass" \
            -append \
            && echo "Imported Meshblocks" \
 && \
-#psql -h $host -U $user -d $db -c "UPDATE admin_bdys.meshblock SET shape=ST_Shift_Longitude(shape)" \
-#&& \
 psql -h $host -U $user -d $db -c "COMMENT ON TABLE admin_bdys.meshblock IS 'Imported on $(date);'" \
 && \
 psql -h $host -U $user -d $db -f ./sql/create_concordance.sql \
@@ -69,6 +67,7 @@ psql -h $host -U $user -d $db -c "COMMENT ON TABLE admin_bdys.meshblock_concorda
 && \
 psql -h $host -U $user -d $db -f ./sql/setup_meshblock.sql \
 && \
+rm -R $tmp_dir
+&& \
 echo 'Imported meshblocks and concordance' \
 
-rm -R $tmp_dir
