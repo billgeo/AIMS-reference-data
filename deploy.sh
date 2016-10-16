@@ -12,6 +12,10 @@ pass=$4
 
 echo "Updating $host:$db"
 
-sh ./disable_revisioning.sh $host $db $user $pass
-sh ./import_localities.sh $host $db $user $pass
-sh ./import_meshblocks.sh $host $db $user $pass
+sh ./disable_revisioning.sh $host $db $user $pass; \
+&& \
+sh ./import_localities.sh $host $db $user $pass; \
+&& \
+sh ./import_meshblocks.sh $host $db $user $pass;
+
+echo "Finished updating $host:$db"
